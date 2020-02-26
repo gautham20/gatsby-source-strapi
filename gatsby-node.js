@@ -118,7 +118,9 @@ exports.sourceNodes = function () {
 
           case 22:
             entities = _context.sent;
-            _context.next = 25;
+
+            console.log('Downloading media files');
+            _context.next = 26;
             return _normalize2.default.downloadMediaFiles({
               entities: entities,
               apiURL: apiURL,
@@ -129,7 +131,7 @@ exports.sourceNodes = function () {
               jwtToken: jwtToken
             });
 
-          case 25:
+          case 26:
             entities = _context.sent;
 
 
@@ -143,7 +145,7 @@ exports.sourceNodes = function () {
 
             fetchActivity.end();
 
-          case 28:
+          case 29:
           case 'end':
             return _context.stop();
         }

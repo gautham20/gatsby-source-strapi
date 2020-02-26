@@ -63,7 +63,7 @@ exports.sourceNodes = async (
 
   // Execute the promises.
   let entities = await Promise.all(promises)
-
+  console.log('Downloading media files')
   entities = await normalize.downloadMediaFiles({
     entities,
     apiURL,

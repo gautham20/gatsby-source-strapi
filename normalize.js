@@ -41,7 +41,7 @@ var extractFields = function () {
 
           case 5:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context2.next = 38;
+              _context2.next = 39;
               break;
             }
 
@@ -76,12 +76,12 @@ var extractFields = function () {
             }()));
 
           case 11:
-            _context2.next = 35;
+            _context2.next = 36;
             break;
 
           case 13:
             if (!(field !== null && field.hasOwnProperty('mime'))) {
-              _context2.next = 35;
+              _context2.next = 36;
               break;
             }
 
@@ -106,7 +106,7 @@ var extractFields = function () {
             // If we don't have cached data, download the file
 
             if (fileNodeID) {
-              _context2.next = 34;
+              _context2.next = 35;
               break;
             }
 
@@ -114,7 +114,9 @@ var extractFields = function () {
 
             // full media url
             source_url = '' + (field.url.startsWith('http') ? '' : apiURL) + field.url;
-            _context2.next = 25;
+
+            console.log(source_url);
+            _context2.next = 26;
             return createRemoteFileNode({
               url: source_url,
               store: store,
@@ -123,80 +125,80 @@ var extractFields = function () {
               auth: auth
             });
 
-          case 25:
+          case 26:
             fileNode = _context2.sent;
 
             if (!fileNode) {
-              _context2.next = 30;
+              _context2.next = 31;
               break;
             }
 
             fileNodeID = fileNode.id;
 
-            _context2.next = 30;
+            _context2.next = 31;
             return cache.set(mediaDataCacheKey, {
               fileNodeID: fileNodeID,
               modified: field.updatedAt
             });
 
-          case 30:
-            _context2.next = 34;
+          case 31:
+            _context2.next = 35;
             break;
 
-          case 32:
-            _context2.prev = 32;
+          case 33:
+            _context2.prev = 33;
             _context2.t0 = _context2['catch'](21);
 
-          case 34:
+          case 35:
             if (fileNodeID) {
               item[key + '___NODE'] = fileNodeID;
             }
 
-          case 35:
+          case 36:
             _iteratorNormalCompletion = true;
             _context2.next = 5;
             break;
 
-          case 38:
-            _context2.next = 44;
+          case 39:
+            _context2.next = 45;
             break;
 
-          case 40:
-            _context2.prev = 40;
+          case 41:
+            _context2.prev = 41;
             _context2.t1 = _context2['catch'](3);
             _didIteratorError = true;
             _iteratorError = _context2.t1;
 
-          case 44:
-            _context2.prev = 44;
+          case 45:
             _context2.prev = 45;
+            _context2.prev = 46;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 47:
-            _context2.prev = 47;
+          case 48:
+            _context2.prev = 48;
 
             if (!_didIteratorError) {
-              _context2.next = 50;
+              _context2.next = 51;
               break;
             }
 
             throw _iteratorError;
 
-          case 50:
-            return _context2.finish(47);
-
           case 51:
-            return _context2.finish(44);
+            return _context2.finish(48);
 
           case 52:
+            return _context2.finish(45);
+
+          case 53:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, undefined, [[3, 40, 44, 52], [21, 32], [45,, 47, 51]]);
+    }, _callee2, undefined, [[3, 41, 45, 53], [21, 33], [46,, 48, 52]]);
   }));
 
   return function extractFields(_x, _x2, _x3, _x4, _x5, _x6, _x7) {

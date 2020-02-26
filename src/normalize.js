@@ -41,6 +41,7 @@ const extractFields = async (
             const source_url = `${field.url.startsWith('http') ? '' : apiURL}${
               field.url
             }`
+            console.log(source_url)
             const fileNode = await createRemoteFileNode({
               url: source_url,
               store,
