@@ -7,11 +7,18 @@ module.exports = async ({
   contentType,
   jwtToken,
   queryLimit,
+  maxPerPage,
   reporter,
 }) => {
   // Define API endpoint.
   const apiBase = `${apiURL}/${pluralize(contentType)}`
   const apiEndpoint = `${apiBase}?_limit=${queryLimit}`
+
+  const apiEndpoints = Array(queryLimit / maxPerPage).fill().map((_, i) => {
+    return `${apiBase}?_limit=${maxPerPage}&_start=${maxPerPage * i}`
+  })
+
+  console.log(apiEndpoints)
 
   reporter.info(`Starting to fetch data from Strapi - ${apiBase}`)
 
@@ -24,10 +31,25 @@ module.exports = async ({
   }
 
   // Make API request.
-  const documents = await axios(apiEndpoint, fetchRequestConfig)
+  let documents = []
+
+  // apiEndpoints.forEach((api) => {
+  //   const paginatedDocs = await axios(api, fetchRequestConfig)
+  //   const paginatedCleanedDocs = paginatedDocs.data.map(item => clean(item))
+  //   documents.concat(paginatedCleanedDocs)
+  // })
+  
+  axios.all(apiEndpoints).then(axios.spread((...responses) => {
+    responses.forEach((resp) => {
+      const cleanedDocs = resp.data.map(item => clean(item))
+      documents.concat(cleanedDocs)
+    })
+  }))
+  
+  //const documents = await axios(apiEndpoint, fetchRequestConfig)
 
   // Map and clean data.
-  return documents.data.map(item => clean(item))
+  return documents
 }
 
 /**
