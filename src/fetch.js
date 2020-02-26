@@ -12,9 +12,9 @@ module.exports = async ({
 }) => {
   // Define API endpoint.
   const apiBase = `${apiURL}/${pluralize(contentType)}`
-  const apiEndpoint = `${apiBase}?_limit=${queryLimit}`
+  //const apiEndpoint = `${apiBase}?_limit=${queryLimit}`
 
-  const apiEndpoints = Array(queryLimit / maxPerPage).fill().map((_, i) => {
+  const apiEndpoints = Array(parseInt(queryLimit / maxPerPage)).fill().map((_, i) => {
     return `${apiBase}?_limit=${maxPerPage}&_start=${maxPerPage * i}`
   })
 
@@ -42,7 +42,8 @@ module.exports = async ({
   axios.all(apiEndpoints).then(axios.spread((...responses) => {
     responses.forEach((resp) => {
       const cleanedDocs = resp.data.map(item => clean(item))
-      documents.concat(cleanedDocs)
+      documents = documents.concat(cleanedDocs)
+      console.log(documents.length)
     })
   }))
   
