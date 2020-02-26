@@ -11,7 +11,7 @@ exports.sourceNodes = async (
     contentTypes = [],
     loginData = {},
     queryLimit = 100,
-    maxPerPage=50
+    maxPerPage = 50,
   }
 ) => {
   const { createNode, touchNode } = boundActionCreators

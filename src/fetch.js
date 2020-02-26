@@ -14,9 +14,11 @@ module.exports = async ({
   const apiBase = `${apiURL}/${pluralize(contentType)}`
   //const apiEndpoint = `${apiBase}?_limit=${queryLimit}`
 
-  const apiEndpoints = Array(parseInt(queryLimit / maxPerPage)).fill().map((_, i) => {
-    return `${apiBase}?_limit=${maxPerPage}&_start=${maxPerPage * i}`
-  })
+  const apiEndpoints = Array(parseInt(queryLimit / maxPerPage))
+    .fill()
+    .map((_, i) => {
+      return `${apiBase}?_limit=${maxPerPage}&_start=${maxPerPage * i}`
+    })
 
   console.log(apiEndpoints)
 
@@ -38,15 +40,17 @@ module.exports = async ({
   //   const paginatedCleanedDocs = paginatedDocs.data.map(item => clean(item))
   //   documents.concat(paginatedCleanedDocs)
   // })
-  
-  axios.all(apiEndpoints).then(axios.spread((...responses) => {
-    responses.forEach((resp) => {
-      const cleanedDocs = resp.data.map(item => clean(item))
-      documents = documents.concat(cleanedDocs)
-      console.log(documents.length)
+
+  axios.all(apiEndpoints).then(
+    axios.spread((...responses) => {
+      responses.forEach(resp => {
+        const cleanedDocs = resp.data.map(item => clean(item))
+        documents = documents.concat(cleanedDocs)
+        console.log(documents.length)
+      })
     })
-  }))
-  
+  )
+
   //const documents = await axios(apiEndpoint, fetchRequestConfig)
 
   // Map and clean data.
