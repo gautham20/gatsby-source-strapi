@@ -41,7 +41,7 @@ module.exports = async ({
   //   documents.concat(paginatedCleanedDocs)
   // })
 
-  axios.all(apiEndpoints).then(
+  await axios.all(apiEndpoints.map(url => axios.get(url))).then(
     axios.spread((...responses) => {
       responses.forEach(resp => {
         const cleanedDocs = resp.data.map(item => clean(item))

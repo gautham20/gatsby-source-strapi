@@ -64,7 +64,10 @@ module.exports = function () {
             //   documents.concat(paginatedCleanedDocs)
             // })
 
-            _axios2.default.all(apiEndpoints).then(_axios2.default.spread(function () {
+            _context.next = 9;
+            return _axios2.default.all(apiEndpoints.map(function (url) {
+              return _axios2.default.get(url);
+            })).then(_axios2.default.spread(function () {
               for (var _len = arguments.length, responses = Array(_len), _key = 0; _key < _len; _key++) {
                 responses[_key] = arguments[_key];
               }
@@ -78,12 +81,10 @@ module.exports = function () {
               });
             }));
 
-            //const documents = await axios(apiEndpoint, fetchRequestConfig)
-
-            // Map and clean data.
+          case 9:
             return _context.abrupt('return', documents);
 
-          case 9:
+          case 10:
           case 'end':
             return _context.stop();
         }
