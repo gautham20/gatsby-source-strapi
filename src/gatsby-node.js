@@ -11,7 +11,7 @@ exports.sourceNodes = async (
     contentTypes = [],
     loginData = {},
     queryLimit = 100,
-    maxPerPageMap = {'default': 50},
+    maxPerPageMap = { default: 50 },
   }
 ) => {
   const { createNode, touchNode } = boundActionCreators
@@ -50,7 +50,9 @@ exports.sourceNodes = async (
 
   // Generate a list of promises based on the `contentTypes` option.
   const promises = contentTypes.map(contentType => {
-    const maxPerPage = maxPerPageMap[contentType]? maxPerPageMap[contentType]: maxPerPageMap['default']
+    const maxPerPage = maxPerPageMap[contentType]
+      ? maxPerPageMap[contentType]
+      : maxPerPageMap['default']
     return fetchData({
       apiURL,
       contentType,

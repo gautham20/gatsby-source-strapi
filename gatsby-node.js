@@ -44,8 +44,8 @@ exports.sourceNodes = function () {
         loginData = _ref3$loginData === undefined ? {} : _ref3$loginData,
         _ref3$queryLimit = _ref3.queryLimit,
         queryLimit = _ref3$queryLimit === undefined ? 100 : _ref3$queryLimit,
-        _ref3$maxPerPage = _ref3.maxPerPage,
-        maxPerPage = _ref3$maxPerPage === undefined ? 50 : _ref3$maxPerPage;
+        _ref3$maxPerPageMap = _ref3.maxPerPageMap,
+        maxPerPageMap = _ref3$maxPerPageMap === undefined ? { default: 50 } : _ref3$maxPerPageMap;
     var createNode, touchNode, jwtToken, authenticationActivity, loginEndpoint, loginResponse, fetchActivity, promises, entities;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -53,7 +53,6 @@ exports.sourceNodes = function () {
           case 0:
             createNode = boundActionCreators.createNode, touchNode = boundActionCreators.touchNode;
             jwtToken = null;
-
             // Check if loginData is set.
 
             if (!(loginData.hasOwnProperty('identifier') && loginData.identifier.length !== 0 && loginData.hasOwnProperty('password') && loginData.password.length !== 0)) {
@@ -101,6 +100,7 @@ exports.sourceNodes = function () {
 
             // Generate a list of promises based on the `contentTypes` option.
             promises = contentTypes.map(function (contentType) {
+              var maxPerPage = maxPerPageMap[contentType] ? maxPerPageMap[contentType] : maxPerPageMap['default'];
               return (0, _fetch2.default)({
                 apiURL: apiURL,
                 contentType: contentType,
