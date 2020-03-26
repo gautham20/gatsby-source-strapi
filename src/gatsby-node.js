@@ -11,12 +11,11 @@ exports.sourceNodes = async (
     contentTypes = [],
     loginData = {},
     queryLimit = 100,
-    maxPerPage = 50,
+    maxPerPageMap = {'default': 50},
   }
 ) => {
   const { createNode, touchNode } = boundActionCreators
   let jwtToken = null
-
   // Check if loginData is set.
   if (
     loginData.hasOwnProperty('identifier') &&
@@ -50,8 +49,9 @@ exports.sourceNodes = async (
   fetchActivity.start()
 
   // Generate a list of promises based on the `contentTypes` option.
-  const promises = contentTypes.map(contentType =>
-    fetchData({
+  const promises = contentTypes.map(contentType => {
+    const maxPerPage = maxPerPageMap[contentType]? maxPerPageMap[contentType]: maxPerPageMap['default']
+    return fetchData({
       apiURL,
       contentType,
       jwtToken,
@@ -59,7 +59,7 @@ exports.sourceNodes = async (
       maxPerPage,
       reporter,
     })
-  )
+  })
 
   // Execute the promises.
   let entities = await Promise.all(promises)

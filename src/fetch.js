@@ -7,13 +7,13 @@ module.exports = async ({
   contentType,
   jwtToken,
   queryLimit,
-  maxPerPageMap,
+  maxPerPage,
   reporter,
 }) => {
   // Define API endpoint.
   const apiBase = `${apiURL}/${pluralize(contentType)}`
   //const apiEndpoint = `${apiBase}?_limit=${queryLimit}`
-  const maxPerPage = maxPerPageMap[contentType]? maxPerPageMap[contentType]: maxPerPageMap['default']
+
   const apiEndpoints = Array(parseInt(queryLimit / maxPerPage))
     .fill()
     .map((_, i) => {
