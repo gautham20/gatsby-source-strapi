@@ -106,7 +106,7 @@ exports.sourceNodes = function () {
                 apiURL: apiURL,
                 contentType: contentType,
                 jwtToken: jwtToken,
-                contentTypeLimit: contentTypeLimit,
+                'queryLimit': contentTypeLimit,
                 maxPerPage: maxPerPage,
                 reporter: reporter
               });
