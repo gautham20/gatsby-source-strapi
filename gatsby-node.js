@@ -43,7 +43,7 @@ exports.sourceNodes = function () {
         _ref3$loginData = _ref3.loginData,
         loginData = _ref3$loginData === undefined ? {} : _ref3$loginData,
         _ref3$queryLimit = _ref3.queryLimit,
-        queryLimit = _ref3$queryLimit === undefined ? 100 : _ref3$queryLimit,
+        queryLimit = _ref3$queryLimit === undefined ? { default: 100 } : _ref3$queryLimit,
         _ref3$maxPerPageMap = _ref3.maxPerPageMap,
         maxPerPageMap = _ref3$maxPerPageMap === undefined ? { default: 50 } : _ref3$maxPerPageMap;
     var createNode, touchNode, jwtToken, authenticationActivity, loginEndpoint, loginResponse, fetchActivity, promises, entities;
@@ -101,11 +101,12 @@ exports.sourceNodes = function () {
             // Generate a list of promises based on the `contentTypes` option.
             promises = contentTypes.map(function (contentType) {
               var maxPerPage = maxPerPageMap[contentType] ? maxPerPageMap[contentType] : maxPerPageMap['default'];
+              var contentTypeLimit = queryLimit[contentType] ? queryLimit[contentType] : queryLimit['default'];
               return (0, _fetch2.default)({
                 apiURL: apiURL,
                 contentType: contentType,
                 jwtToken: jwtToken,
-                queryLimit: queryLimit,
+                contentTypeLimit: contentTypeLimit,
                 maxPerPage: maxPerPage,
                 reporter: reporter
               });

@@ -10,7 +10,7 @@ exports.sourceNodes = async (
     apiURL = 'http://localhost:1337',
     contentTypes = [],
     loginData = {},
-    queryLimit = 100,
+    queryLimit = { default: 100},
     maxPerPageMap = { default: 50 },
   }
 ) => {
@@ -53,11 +53,12 @@ exports.sourceNodes = async (
     const maxPerPage = maxPerPageMap[contentType]
       ? maxPerPageMap[contentType]
       : maxPerPageMap['default']
+    const contentTypeLimit = queryLimit[contentType]? queryLimit[contentType]: queryLimit['default']
     return fetchData({
       apiURL,
       contentType,
       jwtToken,
-      queryLimit,
+      contentTypeLimit,
       maxPerPage,
       reporter,
     })
