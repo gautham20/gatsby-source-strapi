@@ -1,13 +1,5 @@
 'use strict';
 
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
-
 var _keys = require('babel-runtime/core-js/object/keys');
 
 var _keys2 = _interopRequireDefault(_keys);
@@ -15,6 +7,14 @@ var _keys2 = _interopRequireDefault(_keys);
 var _getIterator2 = require('babel-runtime/core-js/get-iterator');
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
@@ -25,75 +25,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _require = require('gatsby-source-filesystem'),
     createRemoteFileNode = _require.createRemoteFileNode;
 
-var extractFields = function () {
-  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(apiURL, store, cache, createNode, touchNode, auth, item) {
-    var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, key, field, fileNodeID, mediaDataCacheKey, cacheMediaData, source_url, fileNode;
+//field contains info that has to go into File
+//item is the overall item in which key is saved
+//key is the key it saved in the object
 
-    return _regenerator2.default.wrap(function _callee2$(_context2) {
+var createFileName = function () {
+  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(store, cache, createNode, touchNode, auth, field, item, key, isArray) {
+    var fileNodeID, mediaDataCacheKey, cacheMediaData, source_url, fileNode;
+    return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
-            _iteratorNormalCompletion = true;
-            _didIteratorError = false;
-            _iteratorError = undefined;
-            _context2.prev = 3;
-            _iterator = (0, _getIterator3.default)((0, _keys2.default)(item));
-
-          case 5:
-            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context2.next = 39;
-              break;
-            }
-
-            key = _step.value;
-            field = item[key];
-
-            if (!Array.isArray(field)) {
-              _context2.next = 13;
-              break;
-            }
-
-            _context2.next = 11;
-            return _promise2.default.all(field.map(function () {
-              var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(f) {
-                return _regenerator2.default.wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        return _context.abrupt('return', extractFields(apiURL, store, cache, createNode, touchNode, auth, f));
-
-                      case 1:
-                      case 'end':
-                        return _context.stop();
-                    }
-                  }
-                }, _callee, undefined);
-              }));
-
-              return function (_x8) {
-                return _ref2.apply(this, arguments);
-              };
-            }()));
-
-          case 11:
-            _context2.next = 36;
-            break;
-
-          case 13:
-            if (!(field !== null && field.hasOwnProperty('mime'))) {
-              _context2.next = 36;
-              break;
-            }
-
             fileNodeID = void 0;
             // using field on the cache key for multiple image field
 
             mediaDataCacheKey = 'strapi-media-' + item.id + '-' + key;
-            _context2.next = 18;
+            _context.next = 4;
             return cache.get(mediaDataCacheKey);
 
-          case 18:
-            cacheMediaData = _context2.sent;
+          case 4:
+            cacheMediaData = _context.sent;
 
 
             // If we have cached media data and it wasn't modified, reuse
@@ -106,17 +57,15 @@ var extractFields = function () {
             // If we don't have cached data, download the file
 
             if (fileNodeID) {
-              _context2.next = 35;
+              _context.next = 21;
               break;
             }
 
-            _context2.prev = 21;
+            _context.prev = 7;
 
             // full media url
             source_url = '' + (field.url.startsWith('http') ? '' : apiURL) + field.url;
-
-            console.log(source_url);
-            _context2.next = 26;
+            _context.next = 11;
             return createRemoteFileNode({
               url: source_url,
               store: store,
@@ -125,189 +74,302 @@ var extractFields = function () {
               auth: auth
             });
 
-          case 26:
-            fileNode = _context2.sent;
+          case 11:
+            fileNode = _context.sent;
 
             if (!fileNode) {
-              _context2.next = 31;
+              _context.next = 16;
               break;
             }
 
             fileNodeID = fileNode.id;
 
-            _context2.next = 31;
+            _context.next = 16;
             return cache.set(mediaDataCacheKey, {
               fileNodeID: fileNodeID,
               modified: field.updatedAt
             });
 
-          case 31:
-            _context2.next = 35;
+          case 16:
+            _context.next = 21;
             break;
 
-          case 33:
-            _context2.prev = 33;
-            _context2.t0 = _context2['catch'](21);
+          case 18:
+            _context.prev = 18;
+            _context.t0 = _context['catch'](7);
 
-          case 35:
+            console.log(_context.t0);
+
+          case 21:
             if (fileNodeID) {
-              item[key + '___NODE'] = fileNodeID;
+              if (isArray) {
+                if (!item.hasOwnProperty(key + '_nodes')) {
+                  item[key + '__NODE'] = [];
+                }
+                item[key + '__NODE'].push(fileNodeID);
+              } else {
+                item[key + '___NODE'] = fileNodeID;
+              }
             }
 
-          case 36:
+          case 22:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined, [[7, 18]]);
+  }));
+
+  return function createFileName(_x, _x2, _x3, _x4, _x5, _x6, _x7, _x8, _x9) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var extractFields = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(apiURL, store, cache, createNode, touchNode, auth, item) {
+    var _loop, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, key;
+
+    return _regenerator2.default.wrap(function _callee3$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            if (!(item && item.hasOwnProperty('mime'))) {
+              _context4.next = 5;
+              break;
+            }
+
+            _context4.next = 3;
+            return createFileName(store, cache, createNode, touchNode, auth, item, item, 'localfile');
+
+          case 3:
+            _context4.next = 31;
+            break;
+
+          case 5:
+            _loop = /*#__PURE__*/_regenerator2.default.mark(function _loop(key) {
+              var field;
+              return _regenerator2.default.wrap(function _loop$(_context3) {
+                while (1) {
+                  switch (_context3.prev = _context3.next) {
+                    case 0:
+                      field = item[key];
+
+                      if (!Array.isArray(field)) {
+                        _context3.next = 6;
+                        break;
+                      }
+
+                      _context3.next = 4;
+                      return _promise2.default.all(field.map(function () {
+                        var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(f) {
+                          return _regenerator2.default.wrap(function _callee2$(_context2) {
+                            while (1) {
+                              switch (_context2.prev = _context2.next) {
+                                case 0:
+                                  return _context2.abrupt('return', extractFields(apiURL, store, cache, createNode, touchNode, auth, f, key));
+
+                                case 1:
+                                case 'end':
+                                  return _context2.stop();
+                              }
+                            }
+                          }, _callee2, undefined);
+                        }));
+
+                        return function (_x17) {
+                          return _ref3.apply(this, arguments);
+                        };
+                      }()));
+
+                    case 4:
+                      _context3.next = 9;
+                      break;
+
+                    case 6:
+                      if (!(field !== null && field !== undefined && field.hasOwnProperty('mime'))) {
+                        _context3.next = 9;
+                        break;
+                      }
+
+                      _context3.next = 9;
+                      return createFileName(store, cache, createNode, touchNode, auth, field, item, key);
+
+                    case 9:
+                    case 'end':
+                      return _context3.stop();
+                  }
+                }
+              }, _loop, undefined);
+            });
             _iteratorNormalCompletion = true;
-            _context2.next = 5;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context4.prev = 9;
+            _iterator = (0, _getIterator3.default)((0, _keys2.default)(item));
+
+          case 11:
+            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              _context4.next = 17;
+              break;
+            }
+
+            key = _step.value;
+            return _context4.delegateYield(_loop(key), 't0', 14);
+
+          case 14:
+            _iteratorNormalCompletion = true;
+            _context4.next = 11;
             break;
 
-          case 39:
-            _context2.next = 45;
+          case 17:
+            _context4.next = 23;
             break;
 
-          case 41:
-            _context2.prev = 41;
-            _context2.t1 = _context2['catch'](3);
+          case 19:
+            _context4.prev = 19;
+            _context4.t1 = _context4['catch'](9);
             _didIteratorError = true;
-            _iteratorError = _context2.t1;
+            _iteratorError = _context4.t1;
 
-          case 45:
-            _context2.prev = 45;
-            _context2.prev = 46;
+          case 23:
+            _context4.prev = 23;
+            _context4.prev = 24;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 48:
-            _context2.prev = 48;
+          case 26:
+            _context4.prev = 26;
 
             if (!_didIteratorError) {
-              _context2.next = 51;
+              _context4.next = 29;
               break;
             }
 
             throw _iteratorError;
 
-          case 51:
-            return _context2.finish(48);
+          case 29:
+            return _context4.finish(26);
 
-          case 52:
-            return _context2.finish(45);
+          case 30:
+            return _context4.finish(23);
 
-          case 53:
+          case 31:
           case 'end':
-            return _context2.stop();
+            return _context4.stop();
         }
       }
-    }, _callee2, undefined, [[3, 41, 45, 53], [21, 33], [46,, 48, 52]]);
+    }, _callee3, undefined, [[9, 19, 23, 31], [24,, 26, 30]]);
   }));
 
-  return function extractFields(_x, _x2, _x3, _x4, _x5, _x6, _x7) {
-    return _ref.apply(this, arguments);
+  return function extractFields(_x10, _x11, _x12, _x13, _x14, _x15, _x16) {
+    return _ref2.apply(this, arguments);
   };
 }();
 
 // Downloads media from image type fields
 exports.downloadMediaFiles = function () {
-  var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(_ref4) {
-    var entities = _ref4.entities,
-        apiURL = _ref4.apiURL,
-        store = _ref4.store,
-        cache = _ref4.cache,
-        createNode = _ref4.createNode,
-        touchNode = _ref4.touchNode,
-        auth = _ref4.jwtToken;
-    return _regenerator2.default.wrap(function _callee4$(_context4) {
+  var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(_ref5) {
+    var entities = _ref5.entities,
+        apiURL = _ref5.apiURL,
+        store = _ref5.store,
+        cache = _ref5.cache,
+        createNode = _ref5.createNode,
+        touchNode = _ref5.touchNode,
+        auth = _ref5.jwtToken;
+    return _regenerator2.default.wrap(function _callee5$(_context6) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
-            return _context4.abrupt('return', _promise2.default.all(entities.map(function () {
-              var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(entity) {
+            return _context6.abrupt('return', _promise2.default.all(entities.map(function () {
+              var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(entity) {
                 var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, item;
 
-                return _regenerator2.default.wrap(function _callee3$(_context3) {
+                return _regenerator2.default.wrap(function _callee4$(_context5) {
                   while (1) {
-                    switch (_context3.prev = _context3.next) {
+                    switch (_context5.prev = _context5.next) {
                       case 0:
                         _iteratorNormalCompletion2 = true;
                         _didIteratorError2 = false;
                         _iteratorError2 = undefined;
-                        _context3.prev = 3;
+                        _context5.prev = 3;
                         _iterator2 = (0, _getIterator3.default)(entity);
 
                       case 5:
                         if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                          _context3.next = 12;
+                          _context5.next = 12;
                           break;
                         }
 
                         item = _step2.value;
-                        _context3.next = 9;
+                        _context5.next = 9;
                         return extractFields(apiURL, store, cache, createNode, touchNode, auth, item);
 
                       case 9:
                         _iteratorNormalCompletion2 = true;
-                        _context3.next = 5;
+                        _context5.next = 5;
                         break;
 
                       case 12:
-                        _context3.next = 18;
+                        _context5.next = 18;
                         break;
 
                       case 14:
-                        _context3.prev = 14;
-                        _context3.t0 = _context3['catch'](3);
+                        _context5.prev = 14;
+                        _context5.t0 = _context5['catch'](3);
                         _didIteratorError2 = true;
-                        _iteratorError2 = _context3.t0;
+                        _iteratorError2 = _context5.t0;
 
                       case 18:
-                        _context3.prev = 18;
-                        _context3.prev = 19;
+                        _context5.prev = 18;
+                        _context5.prev = 19;
 
                         if (!_iteratorNormalCompletion2 && _iterator2.return) {
                           _iterator2.return();
                         }
 
                       case 21:
-                        _context3.prev = 21;
+                        _context5.prev = 21;
 
                         if (!_didIteratorError2) {
-                          _context3.next = 24;
+                          _context5.next = 24;
                           break;
                         }
 
                         throw _iteratorError2;
 
                       case 24:
-                        return _context3.finish(21);
+                        return _context5.finish(21);
 
                       case 25:
-                        return _context3.finish(18);
+                        return _context5.finish(18);
 
                       case 26:
-                        return _context3.abrupt('return', entity);
+                        return _context5.abrupt('return', entity);
 
                       case 27:
                       case 'end':
-                        return _context3.stop();
+                        return _context5.stop();
                     }
                   }
-                }, _callee3, undefined, [[3, 14, 18, 26], [19,, 21, 25]]);
+                }, _callee4, undefined, [[3, 14, 18, 26], [19,, 21, 25]]);
               }));
 
-              return function (_x10) {
-                return _ref5.apply(this, arguments);
+              return function (_x19) {
+                return _ref6.apply(this, arguments);
               };
             }())));
 
           case 1:
           case 'end':
-            return _context4.stop();
+            return _context6.stop();
         }
       }
-    }, _callee4, undefined);
+    }, _callee5, undefined);
   }));
 
-  return function (_x9) {
-    return _ref3.apply(this, arguments);
+  return function (_x18) {
+    return _ref4.apply(this, arguments);
   };
 }();
