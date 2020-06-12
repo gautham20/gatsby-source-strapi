@@ -4,7 +4,17 @@ const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 //item is the overall item in which key is saved
 //key is the key it saved in the object
 
-const createFileName = async (store, cache, createNode, touchNode, auth, field, item, key, isArray) => {
+const createFileName = async (
+  store,
+  cache,
+  createNode,
+  touchNode,
+  auth,
+  field,
+  item,
+  key,
+  isArray
+) => {
   let fileNodeID
   // using field on the cache key for multiple image field
   const mediaDataCacheKey = `strapi-media-${item.id}-${key}`
@@ -47,8 +57,8 @@ const createFileName = async (store, cache, createNode, touchNode, auth, field, 
     }
   }
   if (fileNodeID) {
-    if(isArray){
-      if(!(item.hasOwnProperty(`${key}_nodes`))){
+    if (isArray) {
+      if (!item.hasOwnProperty(`${key}_nodes`)) {
         item[`${key}__NODE`] = []
       }
       item[`${key}__NODE`].push(fileNodeID)
@@ -65,26 +75,56 @@ const extractFields = async (
   createNode,
   touchNode,
   auth,
-  item,
+  item
 ) => {
-  if(item && item.hasOwnProperty('mime')){
-    await createFileName(store, cache, createNode, touchNode, auth, item, item, 'localfile')
+  if (item && item.hasOwnProperty('mime')) {
+    await createFileName(
+      store,
+      cache,
+      createNode,
+      touchNode,
+      auth,
+      item,
+      item,
+      'localfile'
+    )
   } else {
     for (const key of Object.keys(item)) {
       const field = item[key]
-      if (Array.isArray(field)) {
+      if (Array.isArray(field) && key != 'additionalImages') {
         // add recursion to fetch nested strapi references
         await Promise.all(
           field.map(async f => {
-              return extractFields(apiURL, store, cache, createNode, touchNode, auth, f, key)
-            }
-          )
+            return extractFields(
+              apiURL,
+              store,
+              cache,
+              createNode,
+              touchNode,
+              auth,
+              f,
+              key
+            )
+          })
         )
       } else {
         // image fields have a mime property among other
         // maybe should find a better test
-        if (field !== null && field !== undefined && field.hasOwnProperty('mime')) {
-          await createFileName(store, cache, createNode, touchNode, auth, field, item, key)
+        if (
+          field !== null &&
+          field !== undefined &&
+          field.hasOwnProperty('mime')
+        ) {
+          await createFileName(
+            store,
+            cache,
+            createNode,
+            touchNode,
+            auth,
+            field,
+            item,
+            key
+          )
         }
       }
     }

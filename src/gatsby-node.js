@@ -60,7 +60,7 @@ exports.sourceNodes = async (
       apiURL,
       contentType,
       jwtToken,
-      'queryLimit': contentTypeLimit,
+      queryLimit: contentTypeLimit,
       maxPerPage,
       reporter,
     })

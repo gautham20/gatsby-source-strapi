@@ -154,7 +154,7 @@ var extractFields = function () {
                     case 0:
                       field = item[key];
 
-                      if (!Array.isArray(field)) {
+                      if (!(Array.isArray(field) && key != 'additionalImages')) {
                         _context3.next = 6;
                         break;
                       }
